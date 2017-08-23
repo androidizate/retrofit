@@ -1,10 +1,13 @@
-package com.androidizate.clase7;
+package com.androidizate.clase8.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.androidizate.clase8.R;
+import com.androidizate.clase8.dao.User;
 
 import java.util.ArrayList;
 import java.util.List;

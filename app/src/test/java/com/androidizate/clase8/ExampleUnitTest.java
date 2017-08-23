@@ -1,4 +1,4 @@
-package com.androidizate.clase7;
+package com.androidizate.clase8;
 
 import org.junit.Test;
 
