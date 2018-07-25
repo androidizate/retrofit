@@ -1,5 +1,6 @@
 package com.androidizate.clase8.api;
 
+import com.androidizate.clase8.dao.Photo;
 import com.androidizate.clase8.dao.User;
 
 import java.util.List;
@@ -14,4 +15,7 @@ public interface RestApi {
 
     @GET("users")
     Call<List<User>> getAllUsers();
+
+    @GET("photos")
+    Call<List<Photo>> getAllPhotos();
 }

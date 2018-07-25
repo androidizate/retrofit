@@ -9,11 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
-import android.view.TouchDelegate;
 
 import com.androidizate.clase8.adapters.UserAdapter;
+import com.androidizate.clase8.dao.Photo;
 import com.androidizate.clase8.dao.User;
 
 import java.util.List;
@@ -52,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Override
     public void createAlert(String message) {
         new AlertDialog.Builder(this)
-                .setMessage(String.format(getString(R.string.error), message))
+                .setMessage(message)
                 .setTitle(getString(R.string.error))
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
@@ -68,8 +66,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
     }
 
     @Override
-    public void clearData() {
-        // NO OP
+    public void loadPhotos(List<Photo> body) {
+
     }
 
     @Override

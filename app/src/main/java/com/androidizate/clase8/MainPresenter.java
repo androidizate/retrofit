@@ -1,5 +1,8 @@
 package com.androidizate.clase8;
 
+import android.util.Log;
+
+import com.androidizate.clase8.dao.Photo;
 import com.androidizate.clase8.dao.User;
 
 import java.util.List;
@@ -8,7 +11,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-class MainPresenter implements Callback<List<User>> {
+class MainPresenter {
 
     MainView view;
     MainModel model;
@@ -23,24 +26,52 @@ class MainPresenter implements Callback<List<User>> {
         }
 
         if (view.isNetworkConnected()) {
-            model.downloadInfo(this);
+            loadUsers();
+            loadPhotos();
         } else {
             view.createAlert(view.getNoConnectionErrorString());
         }
     }
 
-    @Override
-    public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-        if (view != null && response.isSuccessful()) {
-            view.loadData(response.body());
-        }
+    private void loadPhotos() {
+        model.downloadPhotos(new Callback<List<Photo>>() {
+            @Override
+            public void onResponse(Call<List<Photo>> call, Response<List<Photo>> response) {
+                if (view != null && response.isSuccessful() && response.body() != null) {
+                    for (Photo photo : response.body()) {
+                        Log.d("PHOTO: ", photo.getTitle());
+                    }
+                    view.createAlert("Trajo");
+                } else {
+                    view.createAlert("NO trajo");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Photo>> call, Throwable t) {
+                if (view != null) {
+                    view.createAlert(t.getMessage());
+                }
+            }
+        });
     }
 
-    @Override
-    public void onFailure(Call<List<User>> call, Throwable t) {
-        if (view != null) {
-            view.createAlert(t.getMessage());
-        }
+    private void loadUsers() {
+        model.downloadUsers(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                if (view != null && response.isSuccessful()) {
+                    view.loadData(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<User>>  call, Throwable t) {
+                if (view != null) {
+                    view.createAlert(t.getMessage());
+                }
+            }
+        });
     }
 
     public void setView(MainView view) {
