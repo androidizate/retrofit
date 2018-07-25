@@ -9,21 +9,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.TouchDelegate;
 
 import com.androidizate.clase8.adapters.UserAdapter;
-import com.androidizate.clase8.api.RestApiClient;
 import com.androidizate.clase8.dao.User;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class MainActivity extends AppCompatActivity implements Callback<List<User>> {
+public class MainActivity extends AppCompatActivity implements MainView {
 
     RecyclerView recyclerView;
-    RestApiClient restApiClient;
+    MainPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,21 +30,29 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Use
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
 
-        restApiClient = new RestApiClient();
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        if (!isNetworkConnected()) {
-            createAlert(getString(R.string.not_connected_error));
-        } else {
-            downloadInfo();
-        }
+        presenter = new MainPresenter();
     }
 
-    private void createAlert(String stringResource) {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.setView(this);
+        presenter.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        presenter.setView(null);
+    }
+
+    @Override
+    public void createAlert(String message) {
         new AlertDialog.Builder(this)
-                .setMessage(String.format(getString(R.string.error), stringResource))
+                .setMessage(String.format(getString(R.string.error), message))
                 .setTitle(getString(R.string.error))
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
@@ -56,25 +62,25 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Use
                 }).show();
     }
 
-    private boolean isNetworkConnected() {
+    @Override
+    public void loadData(List<User> users) {
+        recyclerView.setAdapter(new UserAdapter(users));
+    }
+
+    @Override
+    public void clearData() {
+        // NO OP
+    }
+
+    @Override
+    public boolean isNetworkConnected() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnected();
     }
 
-    private void downloadInfo() {
-        restApiClient.getAllUsers().enqueue(this);
-    }
-
     @Override
-    public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-        if (response.isSuccessful()) {
-            recyclerView.setAdapter(new UserAdapter(response.body()));
-        }
-    }
-
-    @Override
-    public void onFailure(Call<List<User>> call, Throwable t) {
-        createAlert(t.getMessage());
+    public String getNoConnectionErrorString() {
+        return getString(R.string.not_connected_error);
     }
 }
