@@ -19,23 +19,24 @@ class RestApiClient : RestApi {
     }
 
     companion object {
-        private const val BASE_URL = "https://jsonplaceholder.typicode.com"
+        private const val BASE_URL = "http://jsonplaceholder.typicode.com/"
     }
+
 
     override fun getAllUsers(): Call<List<User>> {
         return service.getAllUsers()
     }
 
     override fun getAllPosts(): Call<List<Post>> {
-        TODO("Not yet implemented")
+        return service.getAllPosts()
     }
 
     override fun getAllComments(queryMap: HashMap<Any, Any>?): Call<List<Comment>> {
-        TODO("Not yet implemented")
+        return service.getAllComments()
     }
 
     override fun getAllAlbums(): Call<List<Album>> {
-        TODO("Not yet implemented")
+       return service.getAllAlbums()
     }
 
     override fun getAllPhotos(): Call<List<Photo>> {
@@ -43,15 +44,15 @@ class RestApiClient : RestApi {
     }
 
     override fun getAllTodos(): Call<List<Todo>> {
-        TODO("Not yet implemented")
+        return service.getAllTodos()
     }
 
     override fun getPost(uuid: Int): Call<Post> {
         TODO("Not yet implemented")
     }
 
-    override fun getCommentsForPost(uuid: Int): Call<List<Comment>> {
-        TODO("Not yet implemented")
+    override fun getCommentsForPost(): Call<List<Comment>> {
+        return service.getCommentsForPost()
     }
 
     override fun createUser(user: User): Call<User> {

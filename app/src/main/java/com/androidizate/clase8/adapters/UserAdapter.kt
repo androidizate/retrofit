@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.androidizate.clase8.R
+import com.androidizate.clase8.dtos.Post
 import com.androidizate.clase8.dtos.User
 import kotlinx.android.synthetic.main.card_user.view.*
 import java.util.*

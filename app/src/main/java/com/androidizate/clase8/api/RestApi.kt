@@ -32,7 +32,7 @@ interface RestApi {
     fun getPost(@Path(value = "uuid") uuid: Int): Call<Post>
 
     @GET("posts/{uuid}/comments")
-    fun getCommentsForPost(@Path(value = "uuid") uuid: Int): Call<List<Comment>>
+    fun getCommentsForPost(): Call<List<Comment>>
 
     @POST("users")
     fun createUser(@Body user: User): Call<User>
