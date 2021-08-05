@@ -1,21 +1,21 @@
 package com.androidizate.clase8
 
 import android.content.Context
-import android.content.DialogInterface
 import android.net.ConnectivityManager
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.androidizate.clase8.adapters.UserAdapter
+import com.androidizate.clase8.adapters.PhotosAdapter
 import com.androidizate.clase8.api.RestApiClient
-import com.androidizate.clase8.dtos.User
+import com.androidizate.clase8.dtos.Photo
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.String.*
 
-class MainActivity : AppCompatActivity(), Callback<List<User>> {
+class MainActivity : AppCompatActivity() {
     private val restApiClient = RestApiClient()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,12 +32,9 @@ class MainActivity : AppCompatActivity(), Callback<List<User>> {
 
     private fun createAlert(stringResource: String?) {
         AlertDialog.Builder(this)
-            .setMessage(java.lang.String.format(getString(R.string.error), stringResource))
+            .setMessage(format(getString(R.string.error), stringResource))
             .setTitle(getString(R.string.error))
-            .setPositiveButton(
-                R.string.ok,
-                DialogInterface.OnClickListener { dialogInterface, i -> this@MainActivity.finish() }
-            )
+            .setPositiveButton(R.string.ok) { _, i -> this@MainActivity.finish() }
             .show()
     }
 
@@ -49,16 +46,39 @@ class MainActivity : AppCompatActivity(), Callback<List<User>> {
     }
 
     private fun downloadInfo() {
-        restApiClient.getAllUsers().enqueue(this)
-    }
+        /*
+        restApiClient.getAllUsers().enqueue(object : Callback<List<User>> {
+            override fun onResponse(call: Call<List<User>>, response: Response<List<User>>) {
+                if (response.isSuccessful) {
+                    recycler.adapter = UserAdapter(response.body()!!)
+                }
+            }
 
-    override fun onResponse(call: Call<List<User>>, response: Response<List<User>>) {
-        if (response.isSuccessful) {
-            recycler.adapter = UserAdapter(response.body()!!)
-        }
-    }
+            override fun onFailure(call: Call<List<User>>, t: Throwable) {
+                createAlert(t.message)
+            }
+        })
+        */
 
-    override fun onFailure(call: Call<List<User>>, t: Throwable) {
-        createAlert(t.message)
+        restApiClient.getAllPhotos().enqueue(object : Callback<List<Photo>> {
+            override fun onResponse(call: Call<List<Photo>>, response: Response<List<Photo>>) {
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        recycler.adapter = PhotosAdapter(it)
+                    } ?: createAlert("Error loading info")
+                    /* Same as above with let
+                    if (response.body() != null) {
+                        recycler.adapter = PhotosAdapter(it)
+                    } else {
+                        createAlert("Error loading info")
+                    }
+                    */
+                }
+            }
+
+            override fun onFailure(call: Call<List<Photo>>, t: Throwable) {
+                createAlert(t.message)
+            }
+        })
     }
 }
