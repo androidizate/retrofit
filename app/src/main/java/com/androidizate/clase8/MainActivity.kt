@@ -32,13 +32,18 @@ class MainActivity : AppCompatActivity(), Callback<List<User>> {
 
     private fun createAlert(stringResource: String?) {
         AlertDialog.Builder(this)
-                .setMessage(java.lang.String.format(getString(R.string.error), stringResource))
-                .setTitle(getString(R.string.error))
-                .setPositiveButton(R.string.ok, DialogInterface.OnClickListener { dialogInterface, i -> this@MainActivity.finish() }).show()
+            .setMessage(java.lang.String.format(getString(R.string.error), stringResource))
+            .setTitle(getString(R.string.error))
+            .setPositiveButton(
+                R.string.ok,
+                DialogInterface.OnClickListener { dialogInterface, i -> this@MainActivity.finish() }
+            )
+            .show()
     }
 
     private fun isNetworkConnected(): Boolean {
-        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connectivityManager.activeNetworkInfo
         return networkInfo != null && networkInfo.isConnected
     }
