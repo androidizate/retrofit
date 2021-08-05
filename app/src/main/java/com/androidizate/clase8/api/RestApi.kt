@@ -1,7 +1,6 @@
 package com.androidizate.clase8.api
 
 import com.androidizate.clase8.dtos.*
-import retrofit2.Call
 import retrofit2.http.*
 
 /**
@@ -9,49 +8,49 @@ import retrofit2.http.*
  */
 interface RestApi {
     @GET("users")
-    fun getAllUsers(): Call<List<User>>
+    suspend fun getAllUsers(): List<User>
 
     @GET("posts")
-    fun getAllPosts(): Call<List<Post>>
+    suspend fun getAllPosts(): List<Post>
 
     @GET("comments")
-    fun getAllComments(
+    suspend fun getAllComments(
         @QueryMap queryMap: HashMap<Any, Any>? = null
-    ): Call<List<Comment>>
+    ): List<Comment>
 
     @GET("albums")
-    fun getAllAlbums(): Call<List<Album>>
+    suspend fun getAllAlbums(): List<Album>
 
     @GET("photos")
-    fun getAllPhotos(): Call<List<Photo>>
+    suspend fun getAllPhotos(): List<Photo>
 
     @GET("todos")
-    fun getAllTodos(): Call<List<Todo>>
+    suspend fun getAllTodos(): List<Todo>
 
     @GET("posts/{uuid}")
-    fun getPost(@Path(value = "uuid") uuid: Int): Call<Post>
+    suspend fun getPost(@Path(value = "uuid") uuid: Int): Post
 
     @GET("posts/{uuid}/comments")
-    fun getCommentsForPost(@Path(value = "uuid") uuid: Int): Call<List<Comment>>
+    suspend fun getCommentsForPost(@Path(value = "uuid") uuid: Int): List<Comment>
 
     @POST("users")
-    fun createUser(@Body user: User): Call<User>
+    suspend fun createUser(@Body user: User): User
 
     @PUT("users/{uuid}")
-    fun updateUser(
+    suspend fun updateUser(
         @Path(value = "uuid") uuid: Int,
         @Body user: User
-    ): Call<User>
+    ): User
 
     @PATCH("users/{uuid}")
-    fun patchUser(
+    suspend fun patchUser(
         @Path(value = "uuid") uuid: Int,
         @Body user: User
-    ): Call<User>
+    ): User
 
     @DELETE("users/{uuid}")
-    fun deleteUser(
+    suspend fun deleteUser(
         @Path(value = "uuid") uuid: Int,
         @Body user: User
-    ): Call<Unit>
+    )
 }

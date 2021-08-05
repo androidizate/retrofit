@@ -22,51 +22,49 @@ class RestApiClient : RestApi {
         private const val BASE_URL = "https://jsonplaceholder.typicode.com"
     }
 
-    override fun getAllUsers(): Call<List<User>> {
-        return service.getAllUsers()
-    }
+    override suspend fun getAllUsers(): List<User> = service.getAllUsers()
 
-    override fun getAllPosts(): Call<List<Post>> {
+    override suspend fun getAllPosts(): List<Post> = service.getAllPosts()
+
+    override suspend fun getAllComments(queryMap: HashMap<Any, Any>?): List<Comment> {
         TODO("Not yet implemented")
     }
 
-    override fun getAllComments(queryMap: HashMap<Any, Any>?): Call<List<Comment>> {
+    override suspend fun getAllAlbums(): List<Album> {
         TODO("Not yet implemented")
     }
 
-    override fun getAllAlbums(): Call<List<Album>> {
+    override suspend fun getAllPhotos(): List<Photo> {
         TODO("Not yet implemented")
     }
 
-    override fun getAllPhotos(): Call<List<Photo>> {
-        return service.getAllPhotos()
-    }
-
-    override fun getAllTodos(): Call<List<Todo>> {
+    override suspend fun getAllTodos(): List<Todo> {
         TODO("Not yet implemented")
     }
 
-    override fun getPost(uuid: Int): Call<Post> {
+    override suspend fun getPost(uuid: Int): Post {
         TODO("Not yet implemented")
     }
 
-    override fun getCommentsForPost(uuid: Int): Call<List<Comment>> {
+    override suspend fun getCommentsForPost(uuid: Int): List<Comment> {
         TODO("Not yet implemented")
     }
 
-    override fun createUser(user: User): Call<User> {
+    override suspend fun createUser(user: User): User {
         TODO("Not yet implemented")
     }
 
-    override fun updateUser(uuid: Int, user: User): Call<User> {
+    override suspend fun updateUser(uuid: Int, user: User): User {
         TODO("Not yet implemented")
     }
 
-    override fun patchUser(uuid: Int, user: User): Call<User> {
+    override suspend fun patchUser(uuid: Int, user: User): User {
         TODO("Not yet implemented")
     }
 
-    override fun deleteUser(uuid: Int, user: User): Call<Unit> {
+    override suspend fun deleteUser(uuid: Int, user: User) {
         TODO("Not yet implemented")
     }
+
+
 }
