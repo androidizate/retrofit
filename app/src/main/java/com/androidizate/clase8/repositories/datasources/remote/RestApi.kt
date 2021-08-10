@@ -1,6 +1,6 @@
-package com.androidizate.clase8.api
+package com.androidizate.clase8.repositories.datasources.remote
 
-import com.androidizate.clase8.dtos.*
+import com.androidizate.clase8.repositories.datasources.remote.dtos.*
 import retrofit2.http.*
 
 /**

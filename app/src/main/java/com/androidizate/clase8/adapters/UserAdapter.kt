@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.androidizate.clase8.R
-import com.androidizate.clase8.dtos.User
+import com.androidizate.clase8.repositories.datasources.remote.dtos.User
 import kotlinx.android.synthetic.main.card_user.view.*
 import java.util.*
 

@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.androidizate.clase8.R
-import com.androidizate.clase8.dtos.Photo
+import com.androidizate.clase8.repositories.datasources.remote.dtos.Photo
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.item_photo.view.*
 import java.util.*

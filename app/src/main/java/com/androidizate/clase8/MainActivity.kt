@@ -10,8 +10,11 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androidizate.clase8.adapters.UserAdapter
-import com.androidizate.clase8.api.RestApiClient
-import com.androidizate.clase8.dtos.User
+import com.androidizate.clase8.repositories.datasources.local.AppDatabase
+import com.androidizate.clase8.repositories.datasources.remote.RestApiClient
+import com.androidizate.clase8.repositories.datasources.remote.dtos.User
+import com.androidizate.clase8.repositories.datasources.remote.dtos.toDbEntity
+import com.androidizate.clase8.repositories.datasources.remote.dtos.toUser
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
 import java.lang.String.*
@@ -26,16 +29,26 @@ class MainActivity : AppCompatActivity() {
         recycler.layoutManager = linearLayoutManager
         if (!isNetworkConnected()) {
             createAlert(getString(R.string.not_connected_error))
+            getLocalData()
         } else {
             downloadInfo()
         }
+    }
+
+    private fun getLocalData() = lifecycleScope.launch {
+        val users =
+            AppDatabase.getInstance(applicationContext).userDao().getAll().map { userEntity ->
+                userEntity.toUser()
+            }
+        recycler.adapter = UserAdapter(users)
+        progressBar.isVisible = false
     }
 
     private fun createAlert(stringResource: String?) {
         AlertDialog.Builder(this)
             .setMessage(format(getString(R.string.error), stringResource))
             .setTitle(getString(R.string.error))
-            .setPositiveButton(R.string.ok) { _, i -> this@MainActivity.finish() }
+            .setPositiveButton(R.string.ok) { dialog, i -> dialog.dismiss() }
             .show()
     }
 
@@ -52,6 +65,9 @@ class MainActivity : AppCompatActivity() {
         try {
             users = withContext(Dispatchers.IO) {
                 restApiClient.getAllUsers()
+            }
+            users.forEach {
+                AppDatabase.getInstance(applicationContext).userDao().insertAll(it.toDbEntity())
             }
         } catch (exception: Exception) {
             Log.e("MainActivity", exception.message.toString())

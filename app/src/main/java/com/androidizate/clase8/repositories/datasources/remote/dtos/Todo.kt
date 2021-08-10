@@ -1,4 +1,4 @@
-package com.androidizate.clase8.dtos
+package com.androidizate.clase8.repositories.datasources.remote.dtos
 
 data class Todo(
     val userId: Int = 0,
