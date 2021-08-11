@@ -9,12 +9,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.androidizate.clase8.adapters.PostAdapter
 import com.androidizate.clase8.adapters.UserAdapter
 import com.androidizate.clase8.repositories.datasources.local.AppDatabase
 import com.androidizate.clase8.repositories.datasources.remote.RestApiClient
 import com.androidizate.clase8.repositories.datasources.remote.dtos.User
 import com.androidizate.clase8.repositories.datasources.remote.dtos.toDbEntity
 import com.androidizate.clase8.repositories.datasources.remote.dtos.toUser
+import com.androidizate.clase8.repositories.datasources.remote.dtos.toPost
+import com.androidizate.clase8.repositories.datasources.remote.dtos.Post
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
 import java.lang.String.*
@@ -36,11 +39,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getLocalData() = lifecycleScope.launch {
-        val users =
-            AppDatabase.getInstance(applicationContext).userDao().getAll().map { userEntity ->
-                userEntity.toUser()
+        val posts =
+            AppDatabase.getInstance(applicationContext).postDao().getAll().map { postEntity ->
+                postEntity.toPost()
             }
-        recycler.adapter = UserAdapter(users)
+        recycler.adapter = PostAdapter(posts)
         progressBar.isVisible = false
     }
 
@@ -61,18 +64,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun downloadInfo() = lifecycleScope.launch(Dispatchers.Main) {
         progressBar.isVisible = true
-        var users = emptyList<User>()
+        var posts = emptyList<Post>()
         try {
-            users = withContext(Dispatchers.IO) {
-                restApiClient.getAllUsers()
+            posts = withContext(Dispatchers.IO) {
+                restApiClient.getAllPosts()
             }
-            users.forEach {
-                AppDatabase.getInstance(applicationContext).userDao().insertAll(it.toDbEntity())
+            posts.forEach {
+                AppDatabase.getInstance(applicationContext).postDao().insertAll(it.toDbEntity())
             }
         } catch (exception: Exception) {
             Log.e("MainActivity", exception.message.toString())
         }
-        recycler.adapter = UserAdapter(users)
+        recycler.adapter = PostAdapter(posts)
         progressBar.isVisible = false
     }
 }
