@@ -9,12 +9,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.androidizate.clase8.adapters.PostAdapter
 import com.androidizate.clase8.adapters.UserAdapter
 import com.androidizate.clase8.repositories.datasources.local.AppDatabase
+import com.androidizate.clase8.repositories.datasources.local.entities.PostEntity
 import com.androidizate.clase8.repositories.datasources.remote.RestApiClient
-import com.androidizate.clase8.repositories.datasources.remote.dtos.User
-import com.androidizate.clase8.repositories.datasources.remote.dtos.toDbEntity
-import com.androidizate.clase8.repositories.datasources.remote.dtos.toUser
+import com.androidizate.clase8.repositories.datasources.remote.dtos.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
 import java.lang.String.*
@@ -36,13 +36,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getLocalData() = lifecycleScope.launch {
+        val post =  AppDatabase.getInstance(applicationContext).postDao().getAll().map { postEntity ->
+           postEntity.toPost()
+        }
+        recycler.adapter = PostAdapter(post)
+
+
+        /*
         val users =
             AppDatabase.getInstance(applicationContext).userDao().getAll().map { userEntity ->
                 userEntity.toUser()
             }
+
         recycler.adapter = UserAdapter(users)
+        */
         progressBar.isVisible = false
     }
+
 
     private fun createAlert(stringResource: String?) {
         AlertDialog.Builder(this)
@@ -61,10 +71,24 @@ class MainActivity : AppCompatActivity() {
 
     private fun downloadInfo() = lifecycleScope.launch(Dispatchers.Main) {
         progressBar.isVisible = true
-        var users = emptyList<User>()
+        //var users = emptyList<User>()
+
+        var posts = emptyList<Post>()
+        try {
+            posts = withContext(Dispatchers.IO) {
+                restApiClient.getAllPosts()
+            }
+            posts.forEach {
+                AppDatabase.getInstance(applicationContext).postDao().insertAll(it.toDbEntity())
+            }
+        } catch (exception: Exception) {
+            Log.e("MainActivity", exception.message.toString())
+        }
+
+/*
         try {
             users = withContext(Dispatchers.IO) {
-                restApiClient.getAllUsers()
+                restApiClient.getAllPosts()
             }
             users.forEach {
                 AppDatabase.getInstance(applicationContext).userDao().insertAll(it.toDbEntity())
@@ -73,6 +97,8 @@ class MainActivity : AppCompatActivity() {
             Log.e("MainActivity", exception.message.toString())
         }
         recycler.adapter = UserAdapter(users)
+        */
+        recycler.adapter = PostAdapter(posts)
         progressBar.isVisible = false
     }
 }
