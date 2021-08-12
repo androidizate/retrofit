@@ -1,6 +1,5 @@
 package com.androidizate.clase8.data.datasources.remote.dtos
 
-import com.androidizate.clase8.data.datasources.local.entities.UserEntity
 import com.androidizate.clase8.domain.entities.User
 
 /**

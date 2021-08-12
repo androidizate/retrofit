@@ -23,9 +23,11 @@ class RestApiClient : RestApi {
 
     override suspend fun getAllUsers(): List<UserResponse> = service.getAllUsers()
 
-    override suspend fun createUser(userResponse: UserResponse): UserResponse = service.createUser(userResponse)
+    override suspend fun createUser(userResponse: UserResponse): UserResponse =
+        service.createUser(userResponse)
 
-    override suspend fun updateUser(id: Long, userResponse: UserResponse): UserResponse = service.updateUser(userResponse.id, userResponse)
+    override suspend fun updateUser(id: Long, userResponse: UserResponse): UserResponse =
+        service.updateUser(userResponse.id, userResponse)
 
     override suspend fun deleteUser(id: Long) = service.deleteUser(id)
 

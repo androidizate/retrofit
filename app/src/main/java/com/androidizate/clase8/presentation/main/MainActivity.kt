@@ -8,11 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.androidizate.clase8.R
 import com.androidizate.clase8.data.datasources.local.AppDatabase
 import com.androidizate.clase8.data.datasources.remote.RestApiClient
-import com.androidizate.clase8.data.datasources.remote.dtos.UserResponse
 import com.androidizate.clase8.data.repository.user.UserLocalRepository
 import com.androidizate.clase8.data.repository.user.UserRemoteRepository
 import com.androidizate.clase8.databinding.ActivityMainBinding
-import com.androidizate.clase8.domain.entities.User
 import com.androidizate.clase8.domain.usecases.GetAllUsers
 import com.androidizate.clase8.presentation.adapters.UIUser
 import com.androidizate.clase8.presentation.adapters.UserAdapter

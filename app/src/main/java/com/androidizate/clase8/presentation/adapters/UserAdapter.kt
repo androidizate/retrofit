@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.androidizate.clase8.databinding.CardUserBinding
-import com.androidizate.clase8.domain.entities.User
 import java.util.*
 
 /**
