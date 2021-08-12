@@ -6,13 +6,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androidizate.clase8.R
-import com.androidizate.clase8.presentation.adapters.UserAdapter
+import com.androidizate.clase8.data.datasources.local.AppDatabase
+import com.androidizate.clase8.data.datasources.remote.RestApiClient
+import com.androidizate.clase8.data.datasources.remote.dtos.UserResponse
+import com.androidizate.clase8.data.repository.user.UserLocalRepository
+import com.androidizate.clase8.data.repository.user.UserRemoteRepository
 import com.androidizate.clase8.databinding.ActivityMainBinding
-import com.androidizate.clase8.domain.GetAllUsers
+import com.androidizate.clase8.domain.entities.User
+import com.androidizate.clase8.domain.usecases.GetAllUsers
+import com.androidizate.clase8.presentation.adapters.UIUser
+import com.androidizate.clase8.presentation.adapters.UserAdapter
 import com.androidizate.clase8.presentation.main.MainUIState.*
-import com.androidizate.clase8.repositories.datasources.local.AppDatabase
-import com.androidizate.clase8.repositories.datasources.remote.RestApiClient
-import com.androidizate.clase8.repositories.datasources.remote.dtos.User
 import com.androidizate.clase8.utils.NetworkUtils
 import java.lang.String.format
 
@@ -24,13 +28,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val localRepository =
+            UserLocalRepository(AppDatabase.getInstance(applicationContext).userDao())
+        val remoteRepository = UserRemoteRepository(RestApiClient())
+
         // We first create our view model
         viewModel = MainViewModel(
-            GetAllUsers(
-                RestApiClient(),
-                AppDatabase.getInstance(applicationContext),
-                NetworkUtils(applicationContext)
-            )
+            GetAllUsers(remoteRepository, localRepository, NetworkUtils(applicationContext))
         )
 
         // We instantiate a new binding
@@ -51,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         when (state) {
             is ErrorState -> renderErrorState(state.message)
             LoadingState -> renderLoadingState()
-            is SuccessState -> renderSuccessState(state.users)
+            is SuccessState -> renderSuccessState(state.userResponses)
         }
     }
 
@@ -63,12 +67,12 @@ class MainActivity : AppCompatActivity() {
         binding.recycler.isVisible = false
     }
 
-    private fun renderSuccessState(users: List<User>) {
-        if (users.isEmpty()) {
+    private fun renderSuccessState(userResponses: List<UIUser>) {
+        if (userResponses.isEmpty()) {
             createAlert("No results")
         } else {
             binding.recycler.isVisible = true
-            binding.recycler.adapter = UserAdapter(users)
+            binding.recycler.adapter = UserAdapter(userResponses)
         }
     }
 

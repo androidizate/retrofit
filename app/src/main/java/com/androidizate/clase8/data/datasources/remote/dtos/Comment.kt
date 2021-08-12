@@ -1,4 +1,4 @@
-package com.androidizate.clase8.repositories.datasources.remote.dtos
+package com.androidizate.clase8.data.datasources.remote.dtos
 
 data class Comment(
     val postId: Int = 0,

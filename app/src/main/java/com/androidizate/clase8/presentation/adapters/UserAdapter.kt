@@ -4,13 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.androidizate.clase8.databinding.CardUserBinding
-import com.androidizate.clase8.repositories.datasources.remote.dtos.User
+import com.androidizate.clase8.domain.entities.User
 import java.util.*
 
 /**
  * Created by andres.oller on 18/08/17.
  */
-class UserAdapter(private val userList: List<User> = ArrayList()) :
+class UserAdapter(private val userResponseList: List<UIUser> = ArrayList()) :
     RecyclerView.Adapter<UserAdapter.ViewHolder?>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -19,30 +19,31 @@ class UserAdapter(private val userList: List<User> = ArrayList()) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val user = userList[position]
+        val user = userResponseList[position]
         holder.setInfo(user)
     }
 
-    override fun getItemCount(): Int = userList.size
+    override fun getItemCount(): Int = userResponseList.size
 
     inner class ViewHolder(val binding: CardUserBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun setInfo(user: User) {
+        fun setInfo(user: UIUser) {
             binding.userId.text = user.id.toString()
-            binding.name.text = user.name
-            binding.username.text = user.username
-            binding.email.text = user.email
-            binding.street.text = user.address.street
-            binding.suite.text = user.address.suite
-            binding.city.text = user.address.city
-            binding.zipcode.text = user.address.zipcode
-            binding.lat.text = user.address.geo.lat
-            binding.lng.text = user.address.geo.lng
-            binding.phone.text = user.phone
-            binding.website.text = user.website
-            binding.companyName.text = user.company.name
-            binding.catchPhrase.text = user.company.catchPhrase
-            binding.bs.text = user.company.bs
+            binding.name.text = user.description
+            /*
+                binding.email.text = user.email
+                binding.street.text = user.address.street
+                binding.suite.text = user.address.suite
+                binding.city.text = user.address.city
+                binding.zipcode.text = user.address.zipcode
+                binding.lat.text = user.address.geo.lat
+                binding.lng.text = user.address.geo.lng
+                binding.phone.text = user.phone
+                binding.website.text = user.website
+                binding.companyName.text = user.company.name
+                binding.catchPhrase.text = user.company.catchPhrase
+                binding.bs.text = user.company.bs
+            */
         }
     }
 }

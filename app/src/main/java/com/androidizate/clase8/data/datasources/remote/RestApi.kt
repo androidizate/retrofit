@@ -1,6 +1,6 @@
-package com.androidizate.clase8.repositories.datasources.remote
+package com.androidizate.clase8.data.datasources.remote
 
-import com.androidizate.clase8.repositories.datasources.remote.dtos.*
+import com.androidizate.clase8.data.datasources.remote.dtos.UserResponse
 import retrofit2.http.*
 
 /**
@@ -8,9 +8,9 @@ import retrofit2.http.*
  */
 interface RestApi {
     @GET("users")
-    suspend fun getAllUsers(): List<User>
+    suspend fun getAllUsers(): List<UserResponse>
 
-    @GET("posts")
+    /*@GET("posts")
     suspend fun getAllPosts(): List<Post>
 
     @GET("comments")
@@ -31,26 +31,22 @@ interface RestApi {
     suspend fun getPost(@Path(value = "uuid") uuid: Int): Post
 
     @GET("posts/{uuid}/comments")
-    suspend fun getCommentsForPost(@Path(value = "uuid") uuid: Int): List<Comment>
+    suspend fun getCommentsForPost(@Path(value = "uuid") uuid: Int): List<Comment>*/
+
+    @GET("users/{id}")
+    suspend fun getUser(@Path(value = "id") id: Long): UserResponse
 
     @POST("users")
-    suspend fun createUser(@Body user: User): User
+    suspend fun createUser(@Body userResponse: UserResponse): UserResponse
 
-    @PUT("users/{uuid}")
+    @PUT("users/{id}")
     suspend fun updateUser(
-        @Path(value = "uuid") uuid: Int,
-        @Body user: User
-    ): User
+        @Path(value = "id") id: Long,
+        @Body userResponse: UserResponse
+    ): UserResponse
 
-    @PATCH("users/{uuid}")
-    suspend fun patchUser(
-        @Path(value = "uuid") uuid: Int,
-        @Body user: User
-    ): User
-
-    @DELETE("users/{uuid}")
+    @DELETE("users/{id}")
     suspend fun deleteUser(
-        @Path(value = "uuid") uuid: Int,
-        @Body user: User
+        @Path(value = "id") id: Long
     )
 }

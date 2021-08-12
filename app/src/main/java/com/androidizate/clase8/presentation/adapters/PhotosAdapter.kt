@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.androidizate.clase8.R
-import com.androidizate.clase8.repositories.datasources.remote.dtos.Photo
+import com.androidizate.clase8.data.datasources.remote.dtos.Photo
 import java.util.*
 
 /**

@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.androidizate.clase8.domain.AppResult.Error
 import com.androidizate.clase8.domain.AppResult.Success
-import com.androidizate.clase8.domain.GetAllUsers
+import com.androidizate.clase8.domain.entities.User
+import com.androidizate.clase8.domain.usecases.GetAllUsers
+import com.androidizate.clase8.presentation.adapters.toUiUser
 import com.androidizate.clase8.presentation.main.MainUIState.*
 import kotlinx.coroutines.launch
 
@@ -21,7 +23,12 @@ class MainViewModel(
         mutableUiState.value = LoadingState
         when (val result = getAllUsers()) {
             is Error -> mutableUiState.value = ErrorState(result.message)
-            is Success -> mutableUiState.value = SuccessState(result.result)
+            is Success -> handleSuccessState(result.result)
         }
+    }
+
+    private fun handleSuccessState(users: List<User>) {
+        val uiUsers = users.map { it.toUiUser() }
+        mutableUiState.value = SuccessState(uiUsers)
     }
 }
